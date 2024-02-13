@@ -47,7 +47,7 @@ authrouter.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, 'masai');
 
-    res.status(200).json({ token });
+    res.status(200).json({ token,avatar:user.avatar });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
