@@ -4,9 +4,34 @@ const Product = require('../model/Product.model');
 
 productrouter.get('/products', async (req, res) => {
   try {
-    const products = await Product.find();
-    res.status(200).json(products);
-  } catch (error) {
+    let query = {};
+
+    if (req.query.search) {
+      query.name = { $regex: new RegExp(req.query.search, 'i') };
+    }
+    
+    if (req.query.gender) {
+      query.gender = req.query.gender;
+    }
+
+    if (req.query.category) {
+      query.category = req.query.category;
+    }
+
+    if (req.query.sort === 'asc') {
+      const products = await Product.find(query).sort({ price: 1 });
+      res.status(200).json(products);
+    }
+    else if (req.query.sort === 'desc') {
+      const products = await Product.find(query).sort({ price: -1 });
+      res.status(200).json(products);
+    }
+
+    else {
+      const products = await Product.find(query);
+      res.status(200).json(products);
+    }
+  }  catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
