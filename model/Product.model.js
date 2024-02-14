@@ -9,6 +9,11 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    // (required: true,)k
+  },
 });
 
 const Product = mongoose.model('Product', productSchema);

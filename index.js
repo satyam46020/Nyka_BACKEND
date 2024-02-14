@@ -6,6 +6,7 @@ const connection=require("./config/db")
 const productrouter = require('./route/product.route');
 const authrouter = require('./route/user.route');
 const auth = require('./middleware/auth.middleware');
+const Analyticsrouter = require('./route/analytics.route');
 
 const app = express();
 require("dotenv").config()
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use('/api', authrouter);
 app.use('/api', auth , productrouter);
+app.use('/api/analytics',auth, Analyticsrouter);
 
 app.listen(PORT, async () => {
     try {

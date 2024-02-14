@@ -4,8 +4,9 @@ const Product = require('../model/Product.model');
 
 productrouter.get('/products', async (req, res) => {
   try {
-    let query = {};
-    
+    const userId = req.userId;
+
+    let query = { userId };    
     if (req.query.search) {
       query.name = { $regex: new RegExp(req.query.search, 'i') };
     }
@@ -57,7 +58,12 @@ productrouter.get('/products/:id', async (req, res) => {
 
 productrouter.post('/products', async (req, res) => {
   try {
-    const newProduct = new Product(req.body);
+    const userId = req.userId; 
+
+    const newProduct = new Product({
+      ...req.body,
+      userId: userId,
+    });
     await newProduct.save();
     res.status(201).json({ message: 'Product added successfully' });
   } catch (error) {
